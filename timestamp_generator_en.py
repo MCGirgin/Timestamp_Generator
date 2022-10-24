@@ -24,7 +24,7 @@ print('''
 ''')
 
 print("")
-print(" This programme made by MCGirgin.")
+print(" This program made by MCGirgin.")
 print("")
 print(" Place + for time zone.")
 print(" Example usage:")
@@ -129,7 +129,16 @@ def month_query():
 month_query()
 
 time.sleep(1)
-year = input(" YEAR: ")
+def year_query():
+	global year
+	year = input(" YEAR: ")
+	if len(year) == 3:
+		year = "0{}".format(year)
+	elif len(year) == 2:
+		year = "00{}".format(year)
+	elif len(year) == 1:
+		year = "000{}".format(year)
+year_query()
 time.sleep(1)
 
 
@@ -153,19 +162,19 @@ def minute_query():
 	minute = input(" MINUTE: ")
 	if int(minute) > 59 or int(minute) < 0:
 		print("")
-		print(" Check your entry and try again.")
+		print(" Minute must be under 60 and above 0 (0 is included). So check your entry and try again.")
 		print("")
 		minute_query()
 	elif int(minute) < 10 and len(minute) == 1:
 		minute = "0{}".format(minute)
 minute_query()
-
+time.sleep(1)
 def seconds_query():
 	global seconds
 	seconds = input(" SECONDS: ")
 	if int(seconds) > 59 or int(seconds) < 0:
 		print("")
-		print(" Check your entry and try again.")
+		print(" Second must be under 60 and above 0 (0 is included). So check your entry and try again.")
 		print("")
 		seconds_query()
 	elif int(seconds) < 10 and len(seconds) == 1:
@@ -192,12 +201,23 @@ def utc_query():
 utc_query()
 
 time.sleep(1)
-
-date_String = "{}/{}/{} {}:{}:{} UTC {}".format(day, month, year, hour, minute, seconds, utc)
-dt_format = datetime.strptime(date_String, "%d/%b/%Y %H:%M:%S %Z %z")
-timestamp = dt_format.timestamp()
-unix = "{}".format(timestamp)
-unix = int(float(unix))
+try:
+	date_String = "{}/{}/{} {}:{}:{} UTC {}".format(day, month, year, hour, minute, seconds, utc)
+	dt_format = datetime.strptime(date_String, "%d/%b/%Y %H:%M:%S %Z %z")
+	timestamp = dt_format.timestamp()
+	unix = "{}".format(timestamp)
+	unix = int(float(unix))
+except Exception as e:
+	print("")
+	print("We got an error. Please check your entries and try again. If eveything \nyou done is correct, please contact with MCGirgin#3957 through Discord")
+	time.sleep(5)
+	print("")
+	print("Restarting program...")
+	time.sleep(3)
+	print("")
+	print("-------------------------------------")
+	print("")
+	subprocess.call([sys.executable, os.path.realpath(__file__)] + sys.argv[1:]) #restart the program
 
 print("")
 print(" --------------")
